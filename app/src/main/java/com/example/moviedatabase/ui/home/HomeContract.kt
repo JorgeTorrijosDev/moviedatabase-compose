@@ -5,7 +5,9 @@ import com.example.moviedatabase.domain.Movie
 interface HomeContract {
 
     sealed class Event {
-        object GetData : Event()
+        object GetDiscoverMovies : Event()
+        object GetTopRatedMovies : Event()
+        object GetPopularMovies : Event()
     }
 
     data class State(

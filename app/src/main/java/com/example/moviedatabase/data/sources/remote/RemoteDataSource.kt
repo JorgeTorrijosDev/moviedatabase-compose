@@ -11,4 +11,13 @@ class RemoteDataSource @Inject constructor(private val movieDataBaseService: Mov
             it.results.map { it.toMovie() }
         })
 
+    suspend fun getTopRatedMovies() =
+        safeApiCall(apiCall = { movieDataBaseService.getTopRatedMovies()}, transform = { it ->
+            it.results.map { it.toMovie() }
+        })
+
+    suspend fun getPopularMovies() =
+        safeApiCall(apiCall = {movieDataBaseService.getPopularMovies()}, transform = {it ->
+            it.results.map { it.toMovie() }
+        })
 }

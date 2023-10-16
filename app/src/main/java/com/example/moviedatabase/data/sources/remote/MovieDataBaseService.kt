@@ -9,4 +9,10 @@ interface MovieDataBaseService {
     @GET("discover/movie")
     suspend fun getDiscoverMovies(): Response<MoviesResponse>
 
+    @GET("movie/top_rated")
+    suspend fun getTopRatedMovies(): Response<MoviesResponse>
+
+    @GET("movie/popular")
+    suspend fun getPopularMovies(): Response<MoviesResponse>
+
 }

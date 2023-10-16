@@ -10,6 +10,7 @@ import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavDestination
@@ -37,10 +38,15 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
-    Scaffold(bottomBar = { BottomBar(navController = navController) }) {
+    Scaffold(topBar = {
+        TopAppBar {
+
+        }
+    }, bottomBar = { BottomBar(navController = navController) }) {
         BottomNavGraph(navController = navController)
     }
 }
