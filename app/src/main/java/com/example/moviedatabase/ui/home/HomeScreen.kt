@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.pager.HorizontalPager
@@ -22,7 +23,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
@@ -35,18 +40,31 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
     val lista = viewModel.uiStatemovies.collectAsState()
-    val topRatedlista = viewModel.uiStateTopRatedMovies.collectAsState()
+    val topRatedlista = viewModel.uiTopRatedStateTopRatedMovies.collectAsState()
     val topRatedListItems = remember { topRatedlista }
 
-    val popularMovies = viewModel.uiStatePopularMovies.collectAsState()
+    val popularMovies = viewModel.uiPopularStatePopularMovies.collectAsState()
     val popularMoviesItems = remember {
         popularMovies
     }
     val pagerState = rememberPagerState()
+
+    Scaffold(topBar = { MediumTopAppBar(title = { }) }) {
+        if (lista.value.isLoading || topRatedlista.value.isLoading || popularMovies.value.isLoading) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CustomCircularProgressBar()
+            }
+        }
+    }
+
+
+
+
+
     Box(
         modifier = Modifier
             .background(Color.Black)
@@ -256,3 +274,15 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
         }
     }
 }
+
+//Indeterminate (Infinity)
+@Composable
+private fun CustomCircularProgressBar() {
+    CircularProgressIndicator(
+        modifier = Modifier.size(100.dp),
+        color = Color.Blue,
+        strokeWidth = 10.dp
+    )
+
+}
+

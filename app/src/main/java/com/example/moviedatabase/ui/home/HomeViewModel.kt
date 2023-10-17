@@ -30,20 +30,20 @@ class HomeViewModel @Inject constructor(
         handleEvent(HomeContract.Event.GetPopularMovies)
     }
 
-    private val _uiStateMovies: MutableStateFlow<HomeContract.State> by lazy {
-        MutableStateFlow(HomeContract.State())
+    private val _uiDiscoverStateMovies: MutableStateFlow<HomeContract.DiscoverState> by lazy {
+        MutableStateFlow(HomeContract.DiscoverState())
     }
-    val uiStatemovies: StateFlow<HomeContract.State> = _uiStateMovies
+    val uiStatemovies: StateFlow<HomeContract.DiscoverState> = _uiDiscoverStateMovies
 
-    private val _uiStateTopRatedMovies: MutableStateFlow<HomeContract.State> by lazy {
-        MutableStateFlow(HomeContract.State())
+    private val _uiTopRatedStateTopRatedMovies: MutableStateFlow<HomeContract.TopRatedState> by lazy {
+        MutableStateFlow(HomeContract.TopRatedState())
     }
-    val uiStateTopRatedMovies: StateFlow<HomeContract.State> = _uiStateTopRatedMovies
+    val uiTopRatedStateTopRatedMovies: StateFlow<HomeContract.TopRatedState> = _uiTopRatedStateTopRatedMovies
 
-    private val _uiStatePopularMovies: MutableStateFlow<HomeContract.State> by lazy {
-        MutableStateFlow(HomeContract.State())
+    private val _uiPopularStatePopularMovies: MutableStateFlow<HomeContract.PopularSate> by lazy {
+        MutableStateFlow(HomeContract.PopularSate())
     }
-    val uiStatePopularMovies: StateFlow<HomeContract.State> = _uiStatePopularMovies
+    val uiPopularStatePopularMovies: StateFlow<HomeContract.PopularSate> = _uiPopularStatePopularMovies
 
     private val _uiError = Channel<String>()
     val uiError = _uiError.receiveAsFlow()
@@ -57,16 +57,16 @@ class HomeViewModel @Inject constructor(
                         .collect { result ->
                             when (result) {
                                 is NetworkResult.Error -> {
-                                    _uiStateMovies.update { it.copy(error = result.message) }
+                                    _uiDiscoverStateMovies.update { it.copy(error = result.message) }
                                 }
 
-                                is NetworkResult.Loading -> _uiStateMovies.update {
+                                is NetworkResult.Loading -> _uiDiscoverStateMovies.update {
                                     it.copy(
                                         isLoading = true
                                     )
                                 }
 
-                                is NetworkResult.Success -> _uiStateMovies.update {
+                                is NetworkResult.Success -> _uiDiscoverStateMovies.update {
                                     it.copy(
                                         movies = result.data ?: emptyList(), isLoading = false
                                     )
@@ -83,16 +83,16 @@ class HomeViewModel @Inject constructor(
                         .collect { result ->
                             when (result) {
                                 is NetworkResult.Error -> {
-                                    _uiStateTopRatedMovies.update { it.copy(error = result.message) }
+                                    _uiTopRatedStateTopRatedMovies.update { it.copy(error = result.message) }
                                 }
 
-                                is NetworkResult.Loading -> _uiStateTopRatedMovies.update {
+                                is NetworkResult.Loading -> _uiTopRatedStateTopRatedMovies.update {
                                     it.copy(
                                         isLoading = true
                                     )
                                 }
 
-                                is NetworkResult.Success -> _uiStateTopRatedMovies.update {
+                                is NetworkResult.Success -> _uiTopRatedStateTopRatedMovies.update {
                                     it.copy(
                                         movies = result.data ?: emptyList(), isLoading = false
                                     )
@@ -109,16 +109,16 @@ class HomeViewModel @Inject constructor(
                         .collect { result ->
                             when (result) {
                                 is NetworkResult.Error -> {
-                                    _uiStatePopularMovies.update { it.copy(error = result.message) }
+                                    _uiPopularStatePopularMovies.update { it.copy(error = result.message) }
                                 }
 
-                                is NetworkResult.Loading -> _uiStatePopularMovies.update {
+                                is NetworkResult.Loading -> _uiPopularStatePopularMovies.update {
                                     it.copy(
                                         isLoading = true
                                     )
                                 }
 
-                                is NetworkResult.Success -> _uiStatePopularMovies.update {
+                                is NetworkResult.Success -> _uiPopularStatePopularMovies.update {
                                     it.copy(
                                         movies = result.data ?: emptyList(), isLoading = false
                                     )

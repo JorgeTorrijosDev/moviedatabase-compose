@@ -10,7 +10,19 @@ interface HomeContract {
         object GetPopularMovies : Event()
     }
 
-    data class State(
+    data class DiscoverState(
+        val movies: List<Movie> = emptyList(),
+        val isLoading: Boolean = false,
+        val error: String? = null,
+    )
+
+    data class TopRatedState(
+        val movies: List<Movie> = emptyList(),
+        val isLoading: Boolean = false,
+        val error: String? = null,
+    )
+
+    data class PopularSate(
         val movies: List<Movie> = emptyList(),
         val isLoading: Boolean = false,
         val error: String? = null,

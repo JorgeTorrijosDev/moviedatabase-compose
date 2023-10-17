@@ -8,16 +8,22 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.moviedatabase.R
 import com.example.moviedatabase.theme.MoviedatabaseTheme
 import com.example.moviedatabase.ui.bottomBar.BottomBarScreen
 import com.example.moviedatabase.ui.bottomBar.BottomNavGraph
@@ -30,22 +36,27 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MoviedatabaseTheme {
-
-                Navigation()
-
+                // A surface container using the 'background' color from the theme
+                Surface(
+                    color = MaterialTheme.colors.background
+                ) {
+                    Navigation()
+                }
             }
         }
     }
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
     Scaffold(topBar = {
-        TopAppBar {
-
-        }
+        androidx.compose.material3.TopAppBar(
+            title = { stringResource(id = R.string.app_name) },
+            colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = Color.Black)
+        )
     }, bottomBar = { BottomBar(navController = navController) }) {
         BottomNavGraph(navController = navController)
     }
