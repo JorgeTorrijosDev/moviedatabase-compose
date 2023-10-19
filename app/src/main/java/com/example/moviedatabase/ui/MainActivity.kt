@@ -19,6 +19,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -46,6 +47,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     Navigation()
                 }
+
             }
         }
     }
@@ -56,21 +58,26 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
-    Scaffold(topBar = {
-        androidx.compose.material3.TopAppBar(
-            navigationIcon = {
-                IconButton(onClick = { /*TODO*/ }) {
-                    Icon(
-                        modifier = Modifier.width(100.dp),
-                        painter = painterResource(id = R.drawable.movie_database_icon_home),
-                        contentDescription = null
-                    )
-                }
-            },
-            title = { stringResource(id = R.string.app_name) },
-            colors = TopAppBarDefaults.mediumTopAppBarColors()
-        )
-    }, bottomBar = { BottomBar(navController = navController) }) {
+    Scaffold(
+        topBar = {
+            androidx.compose.material3.TopAppBar(
+                navigationIcon = {
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Icon(
+                            modifier = Modifier.width(100.dp),
+                            painter = painterResource(id = R.drawable.movie_database_icon_home),
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
+                },
+                title = { stringResource(id = R.string.app_name) },
+                colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = Color.Black),
+
+                )
+        },
+        bottomBar = { BottomBar(navController = navController) },
+    ) {
         BottomNavGraph(navController = navController)
     }
 }
@@ -82,7 +89,7 @@ fun BottomBar(navController: NavHostController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-    BottomNavigation {
+    BottomNavigation(backgroundColor = Color.Black, contentColor = Color.White) {
         screens.forEach { screen ->
             AddItem(
                 screen = screen,

@@ -57,117 +57,126 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
             CustomCircularProgressBar()
         }
     } else {
-        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-            Row {
-                HorizontalPager(
-                    pageCount = lista.value.movies.size,
-                    state = pagerState,
-                    key = { lista.value.movies[it].name }) { index ->
-                    Box(contentAlignment = Alignment.BottomStart) {
-                        Image(
-                            modifier = Modifier
-                                .height(225.dp)
-                                .fillMaxWidth(),
-                            painter = rememberAsyncImagePainter("https://image.tmdb.org/t/p/original" + lista.value.movies[index].backDrop),
-                            contentDescription = null,
-                            contentScale = ContentScale.FillBounds
-                        )
-                        Box {
-                            Text(
-                                text = lista.value.movies[index].name,
-                                color = Color.White,
-                                fontSize = 20.sp,
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black)) {
+            Column(
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+                    .background(Color.Black)
+                    .fillMaxSize()
+            ) {
+                Row {
+                    HorizontalPager(
+                        pageCount = lista.value.movies.size,
+                        state = pagerState,
+                        key = { lista.value.movies[it].name }) { index ->
+                        Box(contentAlignment = Alignment.BottomStart) {
+                            Image(
                                 modifier = Modifier
-                                    .padding(6.dp)
-                                    .border(1.dp, Color.Blue.copy(alpha = 0.6f), CircleShape)
-                                    .background(Color.Black.copy(alpha = 0.6f), CircleShape)
-                                    .padding(16.dp)
+                                    .height(225.dp)
+                                    .fillMaxWidth(),
+                                painter = rememberAsyncImagePainter("https://image.tmdb.org/t/p/original" + lista.value.movies[index].backDrop),
+                                contentDescription = null,
+                                contentScale = ContentScale.FillBounds
                             )
-                        }
-                    }
-                }
-            }
-            Row {
-                Text(text = "Top rated movies", color = Color.White, fontSize = 20.sp)
-            }
-            Row {
-                Box {
-                    LazyRow(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(175.dp)
-                    ) {
-                        items(topRatedListItems.value.movies.size) { index ->
-                            Card(
-                                shape = RoundedCornerShape(10.dp),
-                                modifier = Modifier
-                                    .fillMaxHeight()
-                                    .padding(5.dp),
-                                elevation = 5.dp,
-                                border = BorderStroke(0.5.dp, Color.Blue)
-                            ) {
-                                Box(modifier = Modifier.width(100.dp)) {
-                                    Image(
-                                        contentScale = ContentScale.Crop,
-                                        painter = rememberAsyncImagePainter("https://image.tmdb.org/t/p/original" + topRatedListItems.value.movies[index].poster),
-                                        contentDescription = null,
-                                        modifier = Modifier.fillMaxSize()
-                                    )
-                                    Text(
-                                        text = topRatedListItems.value.movies[index].voteAverage.toString(),
-                                        color = Color.White,
-                                        modifier = Modifier
-                                            .padding(6.dp)
-                                            .border(
-                                                1.dp,
-                                                Color.Blue.copy(alpha = 0.6f),
-                                                CircleShape
-                                            )
-                                            .background(
-                                                Color.Black.copy(alpha = 0.3f),
-                                                CircleShape
-                                            )
-                                            .padding(6.dp)
-                                    )
-                                }
+                            Box {
+                                Text(
+                                    text = lista.value.movies[index].name,
+                                    color = Color.White,
+                                    fontSize = 20.sp,
+                                    modifier = Modifier
+                                        .padding(6.dp)
+                                        .border(1.dp, Color.Blue.copy(alpha = 0.6f), CircleShape)
+                                        .background(Color.Black.copy(alpha = 0.6f), CircleShape)
+                                        .padding(16.dp)
+                                )
                             }
                         }
                     }
                 }
-
-            }
-            Row {
-                Text(text = "Popular movies", color = Color.White, fontSize = 20.sp)
-            }
-            Row {
-                Box {
-                    LazyRow(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(125.dp)
-                    ) {
-                        items(popularMoviesItems.value.movies.size) { index ->
-                            Card(
-                                shape = RoundedCornerShape(10.dp),
-                                modifier = Modifier
-                                    .width(185.dp)
-                                    .padding(5.dp),
-                                elevation = 5.dp,
-                                border = BorderStroke(0.5.dp, Color.Blue)
-                            ) {
-                                Box(modifier = Modifier.width(100.dp)) {
-                                    Image(
-                                        contentScale = ContentScale.Crop,
-                                        painter = rememberAsyncImagePainter("https://image.tmdb.org/t/p/original" + popularMoviesItems.value.movies[index].backDrop),
-                                        contentDescription = null,
-                                        modifier = Modifier.fillMaxSize()
-                                    )
+                Row {
+                    Text(text = "Top rated movies", color = Color.White, fontSize = 20.sp)
+                }
+                Row {
+                    Box {
+                        LazyRow(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(175.dp)
+                        ) {
+                            items(topRatedListItems.value.movies.size) { index ->
+                                Card(
+                                    shape = RoundedCornerShape(10.dp),
+                                    modifier = Modifier
+                                        .fillMaxHeight()
+                                        .padding(5.dp),
+                                    elevation = 5.dp,
+                                    border = BorderStroke(0.5.dp, Color.Blue)
+                                ) {
+                                    Box(modifier = Modifier.width(100.dp)) {
+                                        Image(
+                                            contentScale = ContentScale.Crop,
+                                            painter = rememberAsyncImagePainter("https://image.tmdb.org/t/p/original" + topRatedListItems.value.movies[index].poster),
+                                            contentDescription = null,
+                                            modifier = Modifier.fillMaxSize()
+                                        )
+                                        Text(
+                                            text = topRatedListItems.value.movies[index].voteAverage.toString(),
+                                            color = Color.White,
+                                            modifier = Modifier
+                                                .padding(6.dp)
+                                                .border(
+                                                    1.dp,
+                                                    Color.Blue.copy(alpha = 0.6f),
+                                                    CircleShape
+                                                )
+                                                .background(
+                                                    Color.Black.copy(alpha = 0.3f),
+                                                    CircleShape
+                                                )
+                                                .padding(6.dp)
+                                        )
+                                    }
                                 }
                             }
                         }
                     }
-                }
 
+                }
+                Row {
+                    Text(text = "Popular movies", color = Color.White, fontSize = 20.sp)
+                }
+                Row {
+                    Box {
+                        LazyRow(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(125.dp)
+                        ) {
+                            items(popularMoviesItems.value.movies.size) { index ->
+                                Card(
+                                    shape = RoundedCornerShape(10.dp),
+                                    modifier = Modifier
+                                        .width(185.dp)
+                                        .padding(5.dp),
+                                    elevation = 5.dp,
+                                    border = BorderStroke(0.5.dp, Color.Blue)
+                                ) {
+                                    Box(modifier = Modifier.width(100.dp)) {
+                                        Image(
+                                            contentScale = ContentScale.Crop,
+                                            painter = rememberAsyncImagePainter("https://image.tmdb.org/t/p/original" + popularMoviesItems.value.movies[index].backDrop),
+                                            contentDescription = null,
+                                            modifier = Modifier.fillMaxSize()
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                }
             }
         }
 
