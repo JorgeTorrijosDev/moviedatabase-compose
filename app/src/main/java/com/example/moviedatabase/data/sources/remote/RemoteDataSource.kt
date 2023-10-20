@@ -1,6 +1,7 @@
 package com.example.moviedatabase.data.sources.remote
 
 import com.example.moviedatabase.data.model.toMovie
+import com.example.moviedatabase.data.model.toMovieDetails
 import javax.inject.Inject
 
 class RemoteDataSource @Inject constructor(private val movieDataBaseService: MovieDataBaseService) :
@@ -12,12 +13,17 @@ class RemoteDataSource @Inject constructor(private val movieDataBaseService: Mov
         })
 
     suspend fun getTopRatedMovies() =
-        safeApiCall(apiCall = { movieDataBaseService.getTopRatedMovies()}, transform = { it ->
+        safeApiCall(apiCall = { movieDataBaseService.getTopRatedMovies() }, transform = { it ->
             it.results.map { it.toMovie() }
         })
 
     suspend fun getPopularMovies() =
-        safeApiCall(apiCall = {movieDataBaseService.getPopularMovies()}, transform = {it ->
+        safeApiCall(apiCall = { movieDataBaseService.getPopularMovies() }, transform = { it ->
             it.results.map { it.toMovie() }
+        })
+
+    suspend fun getMovieDetail(id: Int) =
+        safeApiCall(apiCall = { movieDataBaseService.getMovieDetail(id) }, transform = { it ->
+            it.toMovieDetails()
         })
 }

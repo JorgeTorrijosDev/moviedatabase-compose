@@ -2,6 +2,7 @@ package com.example.moviedatabase.data.repositories
 
 import com.example.moviedatabase.data.sources.remote.RemoteDataSource
 import com.example.moviedatabase.domain.Movie
+import com.example.moviedatabase.domain.MovieDetail
 import com.example.moviedatabase.utils.NetworkResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -30,6 +31,13 @@ class MoviesRepository @Inject constructor(private val remoteDataSource: RemoteD
         return flow {
             emit(NetworkResult.Loading())
             val result = remoteDataSource.getPopularMovies()
+            emit(result)
+        }.flowOn(Dispatchers.IO)
+    }
+    fun getMovieDetails(id: Int): Flow<NetworkResult<MovieDetail>>{
+        return flow {
+            emit(NetworkResult.Loading())
+            val result = remoteDataSource.getMovieDetail(id)
             emit(result)
         }.flowOn(Dispatchers.IO)
     }

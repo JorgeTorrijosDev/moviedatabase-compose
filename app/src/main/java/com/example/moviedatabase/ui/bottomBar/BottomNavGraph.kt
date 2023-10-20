@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.moviedatabase.ui.detail.DetailScreen
 import com.example.moviedatabase.ui.home.HomeScreen
 import com.example.moviedatabase.ui.search.SearchScreen
 
@@ -11,10 +12,13 @@ import com.example.moviedatabase.ui.search.SearchScreen
 fun BottomNavGraph(navController: NavHostController) {
     NavHost(navController = navController, startDestination = BottomBarScreen.Home.route) {
         composable(route = BottomBarScreen.Home.route) {
-            HomeScreen()
+            HomeScreen(navController)
         }
         composable(route = BottomBarScreen.Search.route) {
             SearchScreen()
+        }
+        composable(route = Screen.DetailMovieScreen.route + "/{movieId}"){
+            DetailScreen()
         }
     }
 }

@@ -5,6 +5,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -35,11 +36,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.example.moviedatabase.ui.bottomBar.Screen
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
+fun HomeScreen(navController: NavController,viewModel: HomeViewModel = hiltViewModel()) {
     val lista = viewModel.discoverState
 
     val topRatedlista = viewModel.discoverState
@@ -71,7 +74,9 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                         pageCount = lista.value.movies.size,
                         state = pagerState,
                         key = { lista.value.movies[it].name }) { index ->
-                        Box(contentAlignment = Alignment.BottomStart) {
+                        Box(contentAlignment = Alignment.BottomStart, modifier = Modifier.clickable {
+                            navController.navigate(Screen.DetailMovieScreen.route +"/${lista.value.movies[index].id.toString()}")
+                        }) {
                             Image(
                                 modifier = Modifier
                                     .height(225.dp)
@@ -185,7 +190,7 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
 }
 
 @Composable
-private fun CustomCircularProgressBar() {
+fun CustomCircularProgressBar() {
     CircularProgressIndicator(
         modifier = Modifier.size(100.dp),
         color = Color.Blue,
