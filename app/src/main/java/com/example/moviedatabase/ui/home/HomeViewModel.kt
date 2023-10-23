@@ -24,8 +24,17 @@ class HomeViewModel @Inject constructor(
     private val _discoverState = mutableStateOf(DiscoverListState())
     val discoverState: State<DiscoverListState> = _discoverState
 
+    private val _topRatedState = mutableStateOf(DiscoverListState())
+    val topRatedState: State<DiscoverListState> = _topRatedState
+
+    private val _popularState = mutableStateOf(DiscoverListState())
+    val popularState: State<DiscoverListState> = _popularState
+
+
     init {
         getDiscover()
+        getTopRated()
+        getPopular()
     }
 
     private fun getDiscover() {
@@ -45,6 +54,50 @@ class HomeViewModel @Inject constructor(
 
                 is NetworkResult.Loading -> {
                     _discoverState.value = DiscoverListState(isLoading = true)
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
+
+    private fun getTopRated() {
+        getTopRatedMovies().onEach { result ->
+            when (result) {
+                is NetworkResult.Success -> {
+                    _topRatedState.value = DiscoverListState(
+                        movies = result.data ?: emptyList()
+                    )
+                }
+
+                is NetworkResult.Error -> {
+                    _topRatedState.value = DiscoverListState(
+                        error = result.message ?: "An unexpected error occurred"
+                    )
+                }
+
+                is NetworkResult.Loading -> {
+                    _topRatedState.value = DiscoverListState(isLoading = true)
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
+
+    private fun getPopular() {
+        getPopularMovies().onEach { result ->
+            when (result) {
+                is NetworkResult.Success -> {
+                    _popularState.value = DiscoverListState(
+                        movies = result.data ?: emptyList()
+                    )
+                }
+
+                is NetworkResult.Error -> {
+                    _popularState.value = DiscoverListState(
+                        error = result.message ?: "An unexpected error occurred"
+                    )
+                }
+
+                is NetworkResult.Loading -> {
+                    _popularState.value = DiscoverListState(isLoading = true)
                 }
             }
         }.launchIn(viewModelScope)

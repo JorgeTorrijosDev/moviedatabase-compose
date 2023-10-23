@@ -4,5 +4,5 @@ import com.example.moviedatabase.data.repositories.MoviesRepository
 import javax.inject.Inject
 
 class GetPopularMovies @Inject constructor(private val moviesRepository: MoviesRepository) {
-    fun invoke() = moviesRepository.getPopularMovies()
+    operator fun invoke() = moviesRepository.getPopularMovies()
 }

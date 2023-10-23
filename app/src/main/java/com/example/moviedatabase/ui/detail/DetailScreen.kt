@@ -16,6 +16,7 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.example.moviedatabase.ui.home.CustomCircularProgressBar
@@ -58,7 +59,7 @@ fun DetailScreen(
                     )
                 }
                 Row {
-                    Text(text = movieDetailState.value.movies?.name.toString(), color = Color.White)
+                    Text(text = movieDetailState.value.movies?.name.toString(), color = Color.White, fontSize = 30.sp)
                 }
                 Row {
                     Text(

@@ -26,9 +26,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,29 +38,27 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.moviedatabase.ui.bottomBar.Screen
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun HomeScreen(navController: NavController,viewModel: HomeViewModel = hiltViewModel()) {
-    val lista = viewModel.discoverState
+fun HomeScreen(navController: NavController, viewModel: HomeViewModel = hiltViewModel()) {
+    val discover = viewModel.discoverState
+    val topRated = viewModel.topRatedState
+    val popular = viewModel.popularState
 
-    val topRatedlista = viewModel.discoverState
-    val topRatedListItems = remember { topRatedlista }
 
-    val popularMovies = viewModel.discoverState
-    val popularMoviesItems = remember {
-        popularMovies
-    }
     val pagerState = rememberPagerState()
 
 
-    if (lista.value.isLoading || topRatedlista.value.isLoading || popularMovies.value.isLoading) {
+    if (discover.value.isLoading || topRated.value.isLoading || popular.value.isLoading) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CustomCircularProgressBar()
         }
     } else {
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black)) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black)
+        ) {
             Column(
                 modifier = Modifier
                     .verticalScroll(rememberScrollState())
@@ -71,23 +67,25 @@ fun HomeScreen(navController: NavController,viewModel: HomeViewModel = hiltViewM
             ) {
                 Row {
                     HorizontalPager(
-                        pageCount = lista.value.movies.size,
+                        pageCount = discover.value.movies.size,
                         state = pagerState,
-                        key = { lista.value.movies[it].name }) { index ->
-                        Box(contentAlignment = Alignment.BottomStart, modifier = Modifier.clickable {
-                            navController.navigate(Screen.DetailMovieScreen.route +"/${lista.value.movies[index].id.toString()}")
-                        }) {
+                        key = { discover.value.movies[it].name }) { index ->
+                        Box(
+                            contentAlignment = Alignment.BottomStart,
+                            modifier = Modifier.clickable {
+                                navController.navigate(Screen.DetailMovieScreen.route + "/${discover.value.movies[index].id}")
+                            }) {
                             Image(
                                 modifier = Modifier
                                     .height(225.dp)
                                     .fillMaxWidth(),
-                                painter = rememberAsyncImagePainter("https://image.tmdb.org/t/p/original" + lista.value.movies[index].backDrop),
+                                painter = rememberAsyncImagePainter("https://image.tmdb.org/t/p/original" + discover.value.movies[index].backDrop),
                                 contentDescription = null,
                                 contentScale = ContentScale.FillBounds
                             )
                             Box {
                                 Text(
-                                    text = lista.value.movies[index].name,
+                                    text = discover.value.movies[index].name,
                                     color = Color.White,
                                     fontSize = 20.sp,
                                     modifier = Modifier
@@ -110,24 +108,27 @@ fun HomeScreen(navController: NavController,viewModel: HomeViewModel = hiltViewM
                                 .fillMaxWidth()
                                 .height(175.dp)
                         ) {
-                            items(topRatedListItems.value.movies.size) { index ->
+                            items(topRated.value.movies.size) { index ->
                                 Card(
                                     shape = RoundedCornerShape(10.dp),
                                     modifier = Modifier
                                         .fillMaxHeight()
-                                        .padding(5.dp),
+                                        .padding(5.dp)
+                                        .clickable {
+                                            navController.navigate(Screen.DetailMovieScreen.route + "/${topRated.value.movies[index].id}")
+                                        },
                                     elevation = 5.dp,
                                     border = BorderStroke(0.5.dp, Color.Blue)
                                 ) {
                                     Box(modifier = Modifier.width(100.dp)) {
                                         Image(
                                             contentScale = ContentScale.Crop,
-                                            painter = rememberAsyncImagePainter("https://image.tmdb.org/t/p/original" + topRatedListItems.value.movies[index].poster),
+                                            painter = rememberAsyncImagePainter("https://image.tmdb.org/t/p/original" + topRated.value.movies[index].poster),
                                             contentDescription = null,
                                             modifier = Modifier.fillMaxSize()
                                         )
                                         Text(
-                                            text = topRatedListItems.value.movies[index].voteAverage.toString(),
+                                            text = topRated.value.movies[index].voteAverage.toString(),
                                             color = Color.White,
                                             modifier = Modifier
                                                 .padding(6.dp)
@@ -159,19 +160,22 @@ fun HomeScreen(navController: NavController,viewModel: HomeViewModel = hiltViewM
                                 .fillMaxWidth()
                                 .height(125.dp)
                         ) {
-                            items(popularMoviesItems.value.movies.size) { index ->
+                            items(popular.value.movies.size) { index ->
                                 Card(
                                     shape = RoundedCornerShape(10.dp),
                                     modifier = Modifier
                                         .width(185.dp)
-                                        .padding(5.dp),
+                                        .padding(5.dp)
+                                        .clickable {
+                                            navController.navigate(Screen.DetailMovieScreen.route + "/${popular.value.movies[index].id}")
+                                        },
                                     elevation = 5.dp,
                                     border = BorderStroke(0.5.dp, Color.Blue)
                                 ) {
                                     Box(modifier = Modifier.width(100.dp)) {
                                         Image(
                                             contentScale = ContentScale.Crop,
-                                            painter = rememberAsyncImagePainter("https://image.tmdb.org/t/p/original" + popularMoviesItems.value.movies[index].backDrop),
+                                            painter = rememberAsyncImagePainter("https://image.tmdb.org/t/p/original" + popular.value.movies[index].backDrop),
                                             contentDescription = null,
                                             modifier = Modifier.fillMaxSize()
                                         )
