@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -36,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.example.moviedatabase.domain.Movie
 import com.example.moviedatabase.ui.bottomBar.Screen
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -66,123 +68,32 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel = hiltView
                     .fillMaxSize()
             ) {
                 Row {
-                    HorizontalPager(
-                        pageCount = discover.value.movies.size,
-                        state = pagerState,
-                        key = { discover.value.movies[it].name }) { index ->
-                        Box(
-                            contentAlignment = Alignment.BottomStart,
-                            modifier = Modifier.clickable {
-                                navController.navigate(Screen.DetailMovieScreen.route + "/${discover.value.movies[index].id}")
-                            }) {
-                            Image(
-                                modifier = Modifier
-                                    .height(225.dp)
-                                    .fillMaxWidth(),
-                                painter = rememberAsyncImagePainter("https://image.tmdb.org/t/p/original" + discover.value.movies[index].backDrop),
-                                contentDescription = null,
-                                contentScale = ContentScale.FillBounds
-                            )
-                            Box {
-                                Text(
-                                    text = discover.value.movies[index].name,
-                                    color = Color.White,
-                                    fontSize = 20.sp,
-                                    modifier = Modifier
-                                        .padding(6.dp)
-                                        .border(1.dp, Color.Blue.copy(alpha = 0.6f), CircleShape)
-                                        .background(Color.Black.copy(alpha = 0.6f), CircleShape)
-                                        .padding(16.dp)
-                                )
-                            }
-                        }
-                    }
+                    HorizontalPaggerDiscover(
+                        pagerState = pagerState,
+                        discover = discover.value.movies,
+                        navController = navController
+                    )
                 }
                 Row {
                     Text(text = "Top rated movies", color = Color.White, fontSize = 20.sp)
                 }
                 Row {
                     Box {
-                        LazyRow(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(175.dp)
-                        ) {
-                            items(topRated.value.movies.size) { index ->
-                                Card(
-                                    shape = RoundedCornerShape(10.dp),
-                                    modifier = Modifier
-                                        .fillMaxHeight()
-                                        .padding(5.dp)
-                                        .clickable {
-                                            navController.navigate(Screen.DetailMovieScreen.route + "/${topRated.value.movies[index].id}")
-                                        },
-                                    elevation = 5.dp,
-                                    border = BorderStroke(0.5.dp, Color.Blue)
-                                ) {
-                                    Box(modifier = Modifier.width(100.dp)) {
-                                        Image(
-                                            contentScale = ContentScale.Crop,
-                                            painter = rememberAsyncImagePainter("https://image.tmdb.org/t/p/original" + topRated.value.movies[index].poster),
-                                            contentDescription = null,
-                                            modifier = Modifier.fillMaxSize()
-                                        )
-                                        Text(
-                                            text = topRated.value.movies[index].voteAverage.toString(),
-                                            color = Color.White,
-                                            modifier = Modifier
-                                                .padding(6.dp)
-                                                .border(
-                                                    1.dp,
-                                                    Color.Blue.copy(alpha = 0.6f),
-                                                    CircleShape
-                                                )
-                                                .background(
-                                                    Color.Black.copy(alpha = 0.3f),
-                                                    CircleShape
-                                                )
-                                                .padding(6.dp)
-                                        )
-                                    }
-                                }
-                            }
-                        }
+                        TopRatedMoviesLazyRow(
+                            topRated = topRated.value.movies,
+                            navController = navController
+                        )
                     }
-
                 }
                 Row {
                     Text(text = "Popular movies", color = Color.White, fontSize = 20.sp)
                 }
                 Row {
                     Box {
-                        LazyRow(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(125.dp)
-                        ) {
-                            items(popular.value.movies.size) { index ->
-                                Card(
-                                    shape = RoundedCornerShape(10.dp),
-                                    modifier = Modifier
-                                        .width(185.dp)
-                                        .padding(5.dp)
-                                        .clickable {
-                                            navController.navigate(Screen.DetailMovieScreen.route + "/${popular.value.movies[index].id}")
-                                        },
-                                    elevation = 5.dp,
-                                    border = BorderStroke(0.5.dp, Color.Blue)
-                                ) {
-                                    Box(modifier = Modifier.width(100.dp)) {
-                                        Image(
-                                            contentScale = ContentScale.Crop,
-                                            painter = rememberAsyncImagePainter("https://image.tmdb.org/t/p/original" + popular.value.movies[index].backDrop),
-                                            contentDescription = null,
-                                            modifier = Modifier.fillMaxSize()
-                                        )
-                                    }
-                                }
-                            }
-                        }
+                        PopularMoviesLazyRow(
+                            popular = popular.value.movies,
+                            navController = navController
+                        )
                     }
 
                 }
@@ -191,6 +102,126 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel = hiltView
 
     }
 
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun HorizontalPaggerDiscover(
+    pagerState: PagerState,
+    discover: List<Movie>,
+    navController: NavController
+) {
+    HorizontalPager(
+        pageCount = discover.size,
+        state = pagerState,
+        key = { discover[it].name }) { index ->
+        Box(
+            contentAlignment = Alignment.BottomStart,
+            modifier = Modifier.clickable {
+                navController.navigate(Screen.DetailMovieScreen.route + "/${discover[index].id}")
+            }) {
+            Image(
+                modifier = Modifier
+                    .height(225.dp)
+                    .fillMaxWidth(),
+                painter = rememberAsyncImagePainter("https://image.tmdb.org/t/p/original" + discover[index].backDrop),
+                contentDescription = null,
+                contentScale = ContentScale.FillBounds
+            )
+            Box {
+                Text(
+                    text = discover[index].name,
+                    color = Color.White,
+                    fontSize = 20.sp,
+                    modifier = Modifier
+                        .padding(6.dp)
+                        .border(1.dp, Color.Blue.copy(alpha = 0.6f), CircleShape)
+                        .background(Color.Black.copy(alpha = 0.6f), CircleShape)
+                        .padding(16.dp)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun PopularMoviesLazyRow(popular: List<Movie>, navController: NavController) {
+    LazyRow(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(125.dp)
+    ) {
+        items(popular.size) { index ->
+            Card(
+                shape = RoundedCornerShape(10.dp),
+                modifier = Modifier
+                    .width(185.dp)
+                    .padding(5.dp)
+                    .clickable {
+                        navController.navigate(Screen.DetailMovieScreen.route + "/${popular[index].id}")
+                    },
+                elevation = 5.dp,
+                border = BorderStroke(0.5.dp, Color.Blue)
+            ) {
+                Box(modifier = Modifier.width(100.dp)) {
+                    Image(
+                        contentScale = ContentScale.Crop,
+                        painter = rememberAsyncImagePainter("https://image.tmdb.org/t/p/original" + popular[index].backDrop),
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun TopRatedMoviesLazyRow(topRated: List<Movie>, navController: NavController) {
+    LazyRow(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(175.dp)
+    ) {
+        items(topRated.size) { index ->
+            Card(
+                shape = RoundedCornerShape(10.dp),
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .padding(5.dp)
+                    .clickable {
+                        navController.navigate(Screen.DetailMovieScreen.route + "/${topRated[index].id}")
+                    },
+                elevation = 5.dp,
+                border = BorderStroke(0.5.dp, Color.Blue)
+            ) {
+                Box(modifier = Modifier.width(100.dp)) {
+                    Image(
+                        contentScale = ContentScale.Crop,
+                        painter = rememberAsyncImagePainter("https://image.tmdb.org/t/p/original" + topRated[index].poster),
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                    Text(
+                        text = topRated[index].voteAverage.toString(),
+                        color = Color.White,
+                        modifier = Modifier
+                            .padding(6.dp)
+                            .border(
+                                1.dp,
+                                Color.Blue.copy(alpha = 0.6f),
+                                CircleShape
+                            )
+                            .background(
+                                Color.Black.copy(alpha = 0.3f),
+                                CircleShape
+                            )
+                            .padding(6.dp)
+                    )
+                }
+            }
+        }
+    }
 }
 
 @Composable
