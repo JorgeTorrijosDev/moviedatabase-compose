@@ -15,7 +15,7 @@ fun BottomNavGraph(navController: NavHostController) {
             HomeScreen(navController)
         }
         composable(route = BottomBarScreen.Search.route) {
-            SearchScreen()
+            SearchScreen(navController)
         }
         composable(route = Screen.DetailMovieScreen.route + "/{movieId}"){
             DetailScreen()

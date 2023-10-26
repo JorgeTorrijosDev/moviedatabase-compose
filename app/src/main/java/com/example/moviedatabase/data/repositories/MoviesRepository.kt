@@ -34,7 +34,16 @@ class MoviesRepository @Inject constructor(private val remoteDataSource: RemoteD
             emit(result)
         }.flowOn(Dispatchers.IO)
     }
-    fun getMovieDetails(id: Int): Flow<NetworkResult<MovieDetail>>{
+
+    fun searchMovie(query: String): Flow<NetworkResult<List<Movie>>> {
+        return flow {
+            emit(NetworkResult.Loading())
+            val result = remoteDataSource.searchMovie(query)
+            emit(result)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun getMovieDetails(id: Int): Flow<NetworkResult<MovieDetail>> {
         return flow {
             emit(NetworkResult.Loading())
             val result = remoteDataSource.getMovieDetail(id)

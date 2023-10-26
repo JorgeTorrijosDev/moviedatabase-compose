@@ -9,6 +9,7 @@ class ServiceInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val url = chain.request().url.newBuilder()
             .addQueryParameter(ConstantsUtils.API_KEY, BuildConfig.API_KEY_MOVIEDATABASE)
+            .addQueryParameter(ConstantsUtils.API_ADULT,ConstantsUtils.API_ADULT_VALUE)
             .build()
         val request = chain.request().newBuilder()
             .url(url)
