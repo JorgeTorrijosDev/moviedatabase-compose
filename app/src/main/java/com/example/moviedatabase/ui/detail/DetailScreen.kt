@@ -8,12 +8,18 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.material.Icon
+import androidx.compose.material.IconToggleButton
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -25,6 +31,7 @@ import com.example.moviedatabase.ui.home.CustomCircularProgressBar
 fun DetailScreen(
     detailViewModel: DetailViewModel = hiltViewModel()
 ) {
+
     val movieDetailState = detailViewModel.movieDetailState
 
     if (movieDetailState.value.isLoading) {
@@ -49,6 +56,7 @@ fun DetailScreen(
                         contentDescription = null,
                         modifier = Modifier.fillMaxSize()
                     )
+                    FavoriteButton()
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -59,7 +67,11 @@ fun DetailScreen(
                     )
                 }
                 Row {
-                    Text(text = movieDetailState.value.movies?.name.toString(), color = Color.White, fontSize = 30.sp)
+                    Text(
+                        text = movieDetailState.value.movies?.name.toString(),
+                        color = Color.White,
+                        fontSize = 30.sp
+                    )
                 }
                 Row {
                     Text(
@@ -71,4 +83,36 @@ fun DetailScreen(
 
         }
     }
+}
+
+@Composable
+fun FavoriteButton(
+    modifier: Modifier = Modifier,
+    color: Color = Color(0xffE91E63),
+    detailViewModel: DetailViewModel = hiltViewModel()
+) {
+
+    val isFav = detailViewModel.isFav
+
+    IconToggleButton(
+        checked = isFav,
+        onCheckedChange = {
+            detailViewModel.onChangeFav()
+        }
+    ) {
+        Icon(
+            tint = color,
+            modifier = modifier.graphicsLayer {
+                scaleX = 1.3f
+                scaleY = 1.3f
+            },
+            imageVector = if (detailViewModel.isFav) {
+                Icons.Filled.Favorite
+            } else {
+                Icons.Default.FavoriteBorder
+            },
+            contentDescription = null
+        )
+    }
+
 }
