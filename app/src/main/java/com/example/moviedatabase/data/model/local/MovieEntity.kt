@@ -10,4 +10,6 @@ data class MovieEntity(
     var id: Int?,
     @ColumnInfo(name = "name")
     val name: String?,
+    @ColumnInfo("poster")
+    val poster: String?,
 )
